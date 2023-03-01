@@ -1,19 +1,26 @@
-import { useFetchAlbumsQuery,useAddAlbumsMutation } from "../store";
+import { useFetchAlbumsQuery,useAddAlbumsMutation,useRemoveAlbumMutation } from "../store";
 import Button from "./Button"
 function AlbumList({user}) {
     const {data,isLoading,error}=useFetchAlbumsQuery(user);  
-    const [addAlbums, results]=useAddAlbumsMutation();
-    console.log(results)
+    const [addAlbumsItem, results]=useAddAlbumsMutation();
+    const [removeData,resultsData]=useRemoveAlbumMutation();
+   
     const handelAddHobby=()=>{
-        addAlbums(user)
+        addAlbumsItem(user)
+    }
+    const handelDelete=(hobby)=>{        
+        removeData(hobby)
     }
     return(
         <>
         <div>
             hi {user.name}
         </div>
-        { !isLoading && !error && data.map((hobby)=>            
-             <span key={hobby.id}>{hobby.title}</span>           
+        { !isLoading && !error && data.map((hobby)=>  
+            <>          
+             <span key={hobby.id} id={hobby.id}>{hobby.title}</span> 
+             <Button onClick={()=>handelDelete(hobby)} id={hobby.id}>Delete</Button>   
+             </>       
         )}
           <Button onClick={handelAddHobby}>Add hobby</Button> 
         </>
